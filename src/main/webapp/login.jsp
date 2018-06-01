@@ -11,10 +11,11 @@
 <html>
 <head>
     <title>Title</title>
+   <jsp:include page="partials/head.jsp"/>
 </head>
 <body>
 
-
+<div id="container">
 <form method="POST" action="login.jsp">
 
     <label for="username">Username</label>
@@ -29,6 +30,7 @@
 
 
 </form>
+</div>
 
 <c:if test="${param.username =='admin' && param.password =='password'}">
 

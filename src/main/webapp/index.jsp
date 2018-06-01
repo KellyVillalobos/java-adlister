@@ -3,6 +3,7 @@
 <html>
 <head>
     <title><%= "some title" %></title>
+    <jsp:include page="partials/head.jsp" />
 </head>
 <body>
 <jsp:include page="partials/navbar.jsp" />

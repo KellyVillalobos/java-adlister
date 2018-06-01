@@ -10,6 +10,7 @@ public class CounterServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         counter += 1;
+        response.setContentType("text/html");
         response.getWriter().println("<h1>The count is " + counter + ".</h1>");
     }
 }
