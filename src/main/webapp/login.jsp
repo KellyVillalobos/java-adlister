@@ -6,8 +6,16 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+    <%
+        if (request.getMethod().equalsIgnoreCase("post")) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            if (username.equals("admin") && password.equals("password")) {
+                response.sendRedirect("profile.jsp  ");
+            }
+        }
+    %>
 <html>
 <head>
     <title>Title</title>
@@ -15,8 +23,11 @@
 </head>
 <body>
 
+
+
+
 <div id="container">
-<form method="POST" action="login.jsp">
+<form method="POST" action="/login.jsp">
 
     <label for="username">Username</label>
     <input id="username" name="username" type="text">
@@ -32,13 +43,8 @@
 </form>
 </div>
 
-<c:if test="${param.username =='admin' && param.password =='password'}">
 
-    <%
-        String redirectURL = "profile.jsp";
-        response.sendRedirect(redirectURL);
-    %>
-</c:if>
+
 
 
 </body>
