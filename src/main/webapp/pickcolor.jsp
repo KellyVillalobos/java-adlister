@@ -14,9 +14,13 @@
 <div class="container">
     <h1>Please choose color</h1>
     <form action="/color" method="POST">
-        <div class="form-group">
-            <label for="color">Enter Color</label>
-            <input id="color" name="color" class="form-control" type="text" placeholder="Enter your favorite color" autofocus required>
+        <div>
+            <label for="color1">Enter Color</label>
+            <input type="color" id="color1" name="color1"  autofocus required>
+        </div>
+        <div>
+            <label for="color2">Enter Color</label>
+            <input type="color" id="color2" name="color2"  autofocus required>
         </div>
         <input type="submit" class="btn btn-primary btn-block" value="Log In">
     </form>

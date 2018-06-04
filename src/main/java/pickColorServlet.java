@@ -13,8 +13,10 @@ public class pickColorServlet extends HttpServlet {
         request.getRequestDispatcher("/pickcolor.jsp").forward(request, response);
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws  IOException, ServletException {
-        String color = request.getParameter("color");
-        request.setAttribute("color", color);
+        String color1 = request.getParameter("color1");
+        String color2 = request.getParameter("color2");
+        request.setAttribute("color1", color1);
+        request.setAttribute("color2", color2);
 
         request.getRequestDispatcher("/favorite.jsp").forward(request, response);
 
