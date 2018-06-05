@@ -1,4 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String isLoggedIn = (String) session.getAttribute("isLoggedIn");
+    if (isLoggedIn!=null) {
+        response.sendRedirect("/profile");
+    }
+%>
 <html>
 <head>
     <jsp:include page="../partials/head.jsp">
