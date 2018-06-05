@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "LogOutServlet", urlPatterns = "/logout")
-public class LogOutServlet extends HttpServlet{
+public class LogOutServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getSession().invalidate();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws  ServletException, IOException{
-       request.getSession().invalidate();
-
-       response.sendRedirect("/login");
+        response.sendRedirect("/login");
     }
 }
