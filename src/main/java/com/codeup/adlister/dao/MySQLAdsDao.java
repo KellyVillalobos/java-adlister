@@ -1,11 +1,8 @@
 package com.codeup.adlister.dao;
 
 import com.codeup.adlister.models.Ad;
-import com.mysql.cj.jdbc.Driver;
+import com.codeup.adlister.models.Config;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,63 +12,83 @@ public class MySQLAdsDao implements Ads {
 
     public MySQLAdsDao(Config config) {
         try {
-            DriverManager.registerDriver(new Driver());
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             connection = DriverManager.getConnection(
-                config.getUrl(),
-                config.getUser(),
-                config.getPassword()
+                    config.getUrl(),
+                    config.getUser(),
+                    config.getPassword()
             );
         } catch (SQLException e) {
-            throw new RuntimeException("Error connecting to the database!", e);
+            e.printStackTrace();
         }
     }
 
+
     @Override
     public List<Ad> all() {
-        Statement stmt = null;
+        Statement statement = null;
         try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
-            return createAdsFromResults(rs);
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM ads");
+            return listOfAdds(resultSet);
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving all ads.", e);
+           throw new RuntimeException("error connecting to the database");
         }
+
     }
 
     @Override
     public Long insert(Ad ad) {
         try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
-            return rs.getLong(1);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(insertAdd(ad), Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            return resultSet.getLong(1);
+
         } catch (SQLException e) {
-            throw new RuntimeException("Error creating a new ad.", e);
+            throw new RuntimeException("error retrieving new adds");
         }
+
     }
 
-    private String createInsertQuery(Ad ad) {
-        return "INSERT INTO ads(user_id, title, description) VALUES "
-            + "(" + ad.getUserId() + ", "
-            + "'" + ad.getTitle() +"', "
-            + "'" + ad.getDescription() + "')";
+    private String insertAdd(Ad ad) {
+        return "INSERT INTO ads(user_id, title, description) VALUE "
+                + "('" + ad.getUserId() + "',"
+                + "'" + ad.getTitle() + "',"
+                + "'" + ad.getDescription() + "')";
+
     }
 
-    private Ad extractAd(ResultSet rs) throws SQLException {
+    private Ad getAdd(ResultSet resultSet) throws SQLException {
         return new Ad(
-            rs.getLong("id"),
-            rs.getLong("user_id"),
-            rs.getString("title"),
-            rs.getString("description")
+                resultSet.getLong("id"),
+                resultSet.getLong("user_id"),
+                resultSet.getString("title"),
+                resultSet.getString("description")
         );
+
     }
 
-    private List<Ad> createAdsFromResults(ResultSet rs) throws SQLException {
+    private List<Ad> listOfAdds(ResultSet resultSet) throws SQLException {
         List<Ad> ads = new ArrayList<>();
-        while (rs.next()) {
-            ads.add(extractAd(rs));
+        while (resultSet.next()) {
+            ads.add(getAdd(resultSet));
         }
         return ads;
     }
+
+    public List<Ad> search(String searchTern) throws SQLException {
+        String query = "SELECT * FROM ads WHERE title LIKE '%?%' OR description LIKE '%?%'";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, searchTern);
+        statement.setString(2, searchTern);
+        statement.executeUpdate();
+        ResultSet resultSet = statement.getResultSet();
+        return listOfAdds(resultSet);
+    }
+
+
 }
+
