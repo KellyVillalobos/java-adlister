@@ -2,4 +2,4 @@
 target/
 .idea/
 sql/
-Config.java
+com.codeup.adlister.dao.Config.java

@@ -1,4 +1,6 @@
-import java.sql.Connection;
+package com.codeup.adlister.dao;
+
+import com.codeup.adlister.models.Ads;
 
 public class DaoFactory {
     private static Ads adsDao;
