@@ -33,7 +33,7 @@ public class MySQLAdsDao implements Ads {
             return listOfAdds(resultSet);
 
         } catch (SQLException e) {
-           throw new RuntimeException("error connecting to the database");
+            throw new RuntimeException("error connecting to the database");
         }
 
     }
@@ -41,8 +41,12 @@ public class MySQLAdsDao implements Ads {
     @Override
     public Long insert(Ad ad) {
         try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(insertAdd(ad), Statement.RETURN_GENERATED_KEYS);
+            String sql = "INSERT INTO ads(user_id, title, description) VALUES (?,?,?)";
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            statement.setLong(1, ad.getUserId());
+            statement.setString(2, ad.getTitle());
+            statement.setString(3, ad.getDescription());
+            statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
             return resultSet.getLong(1);
@@ -53,13 +57,6 @@ public class MySQLAdsDao implements Ads {
 
     }
 
-    private String insertAdd(Ad ad) {
-        return "INSERT INTO ads(user_id, title, description) VALUE "
-                + "('" + ad.getUserId() + "',"
-                + "'" + ad.getTitle() + "',"
-                + "'" + ad.getDescription() + "')";
-
-    }
 
     private Ad getAdd(ResultSet resultSet) throws SQLException {
         return new Ad(
@@ -79,15 +76,7 @@ public class MySQLAdsDao implements Ads {
         return ads;
     }
 
-    public List<Ad> search(String searchTern) throws SQLException {
-        String query = "SELECT * FROM ads WHERE title LIKE '%?%' OR description LIKE '%?%'";
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, searchTern);
-        statement.setString(2, searchTern);
-        statement.executeUpdate();
-        ResultSet resultSet = statement.getResultSet();
-        return listOfAdds(resultSet);
-    }
+
 
 
 }
