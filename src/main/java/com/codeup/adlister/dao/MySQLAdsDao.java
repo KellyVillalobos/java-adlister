@@ -19,7 +19,7 @@ public class MySQLAdsDao implements Ads {
                     config.getPassword()
             );
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("There is a problem with the MySQLAdsDao", e);
         }
     }
 
@@ -33,7 +33,7 @@ public class MySQLAdsDao implements Ads {
             return listOfAdds(resultSet);
 
         } catch (SQLException e) {
-            throw new RuntimeException("error connecting to the database");
+            throw new RuntimeException("error connecting to the database", e);
         }
 
     }
@@ -52,7 +52,7 @@ public class MySQLAdsDao implements Ads {
             return resultSet.getLong(1);
 
         } catch (SQLException e) {
-            throw new RuntimeException("error retrieving new adds");
+            throw new RuntimeException("error retrieving new adds", e);
         }
 
     }
